@@ -4,6 +4,7 @@ from sqlalchemy import orm
 
 from .db_session import SqlAlchemyBase
 
+
 class Themes(SqlAlchemyBase):
     __tablename__ = 'themes'
 
