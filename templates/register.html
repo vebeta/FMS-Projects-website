@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="form">
+        <form novalidate>
+          <div class="mb-3">
+            <label for="Name" class="form-label">Имя</label>
+            <input type="text" class="form-control" id="Name">
+          </div>
+          <div class="mb-3">
+            <label for="Surname" class="form-label">Фамилия</label>
+            <input type="text" class="form-control" id="Surname">
+          </div>
+          <div class="mb-3">
+            <label for="Email" class="form-label">Адрес электронной почты</label>
+            <input type="email" class="form-control" id="Email">
+          </div>
+          <div class="mb-3">
+            <label for="Password" class="form-label">Пароль</label>
+            <input type="password" class="form-control" id="Password">
+          </div>
+          <div class="mb-3">
+            <label for="ConfirmPassword" class="form-label">Повторите пароль</label>
+            <input type="password" class="form-control" id="ConfirmPassword">
+          </div>
+          <button type="submit" class="btn btn-primary">Создать аккаунт</button>
+        </form>
+    </div>
+{% endblock %}
