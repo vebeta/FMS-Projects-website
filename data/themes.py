@@ -17,3 +17,4 @@ class Themes(SqlAlchemyBase):
     is_accepted = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
     author_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
+    user = orm.relationship('User')
