@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, flash
 from forms import LoginForm, RegisterForm
 from flask_login import LoginManager, login_user, logout_user, login_required
 from data.users import User
@@ -32,17 +32,16 @@ def main_page():
 def reqister():
     form = RegisterForm()
     errors = {
-        "email": list(form.email.errors),
-        "password": list(form.password.errors),
-        "surname": list(form.surname.errors),
-        "name": list(form.name.errors)
+        "email": [],
+        "password": [],
+        "surname": [],
+        "name": []
     }
     if form.validate_on_submit():
-        if form.password.data != form.confirm.data:
-            errors["password"].append("Пароли не совпадают!")
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             errors["email"].append("Почта с таким адресом уже занята!")
+        print(errors)
         if any(errors.values()):
             return render_template("register.html", title="Регистрация", form=form, errors=errors)
         user = User(surname=form.surname.data,
@@ -51,7 +50,9 @@ def reqister():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/login')
+        login_user(user)
+        flash("Вы успешно зарегистрировались!")
+        return redirect('/')
     return render_template('register.html', title='Регистрация', form=form, errors=errors)
 
 
@@ -78,6 +79,7 @@ def login():
         if any(errors.values()):
             return render_template('login.html', title="Авторизация", form=form, errors=errors)
         login_user(user, remember=form.remember_me.data)
+        flash("Вы успешно вошли!")
         return redirect("/")
     return render_template('login.html', title='Авторизация', form=form, errors=errors)
 

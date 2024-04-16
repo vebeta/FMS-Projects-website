@@ -11,21 +11,33 @@
     <title>{{title}}</title>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-light bg-light">
-        <h1>Научные проекты ФМШ</h1>
-            {% if current_user.is_authenticated %}
-                <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
-            {% else %}
-                <p>
-                    <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
-                    <a class="btn btn-success" href="/login">Войти</a>
-                </p>
-            {% endif %}
-    </nav>
-</header>
-<main role="main" class="container">
-    {% block content %}{% endblock %}
-</main>
+    <header>
+        <nav class="navbar navbar-light bg-light">
+            <h1>Научные проекты ФМШ</h1>
+                {% if current_user.is_authenticated %}
+                    <p>
+                        <a class="navbar-brand" href="/profile">{{ current_user.name }} {{ current_user.surname }}</a>
+                        <a class="btn btn-success" href="/logout">Выйти</a>
+                    </p>
+                {% else %}
+                    <p>
+                        <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                        <a class="btn btn-success" href="/login">Войти</a>
+                    </p>
+                {% endif %}
+        </nav>
+    </header>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <main role="main" class="container">
+        {% block content %}{% endblock %}
+    </main>
 </body>
 </html>
