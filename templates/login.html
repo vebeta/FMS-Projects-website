@@ -2,20 +2,28 @@
 
 {% block content %}
     <div class="form">
-        <form novalidate>
-          <div class="mb-3">
-            <label for="Email" class="form-label">Адрес электронной почты</label>
-            <input type="email" class="form-control" id="Email">
-          </div>
-          <div class="mb-3">
-            <label for="Password" class="form-label">Пароль</label>
-            <input type="password" class="form-control" id="Password">
-          </div>
-          <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="RememberMe">
-            <label class="form-check-label" for="RememberMe">Запомнить меня!</label>
-          </div>
-          <button type="submit" class="btn btn-success">Войти</button>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.email.label }}<br>
+                {{ form.email(class="form-control", type="email") }}<br>
+                {% for error in errors.email %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.password.label }}<br>
+                {{ form.password(class="form-control", type="password") }}<br>
+                {% for error in errors.password %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </p>
+            <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+            <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
         </form>
     </div>
 {% endblock %}
