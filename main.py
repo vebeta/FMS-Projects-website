@@ -3,10 +3,16 @@ from forms import LoginForm, RegisterForm, EditProfileForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.users import User
 from data.themes import Themes
+from flask_sqlalchemy import SQLAlchemy
 from data import db_session
+from flask_migrate import Migrate
+from config import Config
+
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config.from_object(Config)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 
 def main():
@@ -109,7 +115,8 @@ def edit_profile():
         current_user.name = form.name.data
         if form.password.data:
             current_user.set_password(form.password.data)
-        db_sess.add(current_user)
+        new_user = db_sess.merge(current_user)
+        db_sess.add(new_user)
         db_sess.commit()
         flash('Изменения сохранены!')
         return redirect(f"/profile/{current_user.id}")

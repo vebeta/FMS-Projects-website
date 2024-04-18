@@ -14,7 +14,8 @@ class Themes(SqlAlchemyBase):
     description = sqlalchemy.Column(sqlalchemy.String)
     start_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime)
     end_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime)
-    is_accepted = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
+    status = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
     author_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
+    student_id = sqlalchemy.Column(sqlalchemy.Integer)
     user = orm.relationship('User')
