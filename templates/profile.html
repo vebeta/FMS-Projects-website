@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="profile">
+    <div>
+        {% if user.role == "student" %}<p style="color: green; margin: 0 0 0 0;">Ученик</p>
+        {% elif user.role == "teacher" %}<p style="color: blue; margin: 0 0 0 0;">Учитель</p>
+        {% elif user.role == "admin" %}<p style="color: black; margin: 0 0 0 0;">Администратор</p>
+        {% endif %}
+        <h1>
+            {{ user.surname }}
+        </h1>
+        <h1>
+            {{ user.name }}
+        </h1>
+        <h3>
+            {{ user.email }}
+        </h3>
+        {% if user == current_user %}<a class="btn btn-primary" style="color: white" href="/edit_profile">Изменить данные</a>{% endif %}
+    </div>
+    <img class="image" src="/static/images/logo.png">
+</div>
+{% endblock %}
