@@ -5,33 +5,6 @@
     <form action="" method="">
         {{ form.hidden_tag() }}
         <p>
-            {{ form.surname.label }}<br>
-            {{ form.surname(class="form-control") }}<br>
-            {% for error in errors.surname %}
-                <p class="alert alert-danger" role="alert">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.name.label }}<br>
-            {{ form.name(class="form-control") }}<br>
-            {% for error in errors.name %}
-                <p class="alert alert-danger" role="alert">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.email.label }}<br>
-            {{ form.email(class="form-control", type="email") }}<br>
-            {% for error in errors.email %}
-                <p class="alert alert-danger" role="alert">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </p>
-        <p>
             {{ form.title.label }}<br>
             {{ form.title(class="form-control") }}<br>
             {% for error in errors.title %}
@@ -51,7 +24,7 @@
         </p>
         <p>
             {{ form.description.label }}<br>
-            {{ form.description(class="form-control") }}<br>
+            <textarea class="form-control"></textarea><br>
             {% for error in errors.description %}
                 <p class="alert alert-danger" role="alert">
                     {{ error }}
