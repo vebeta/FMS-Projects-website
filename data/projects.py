@@ -1,12 +1,11 @@
 import datetime
 import sqlalchemy
 from sqlalchemy import orm
-
 from .db_session import SqlAlchemyBase
 
 
-class Themes(SqlAlchemyBase):
-    __tablename__ = 'themes'
+class Projects(SqlAlchemyBase):
+    __tablename__ = 'projects'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String)
@@ -14,8 +13,8 @@ class Themes(SqlAlchemyBase):
     description = sqlalchemy.Column(sqlalchemy.String)
     start_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime)
     end_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime)
-    status = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
+    is_accepted = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
     author_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
-    student_id = sqlalchemy.Column(sqlalchemy.Integer)
+    #student_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
     user = orm.relationship('User')

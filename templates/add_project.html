@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="form">
-    <form action="" method="post">
+    <form action="" method="">
         {{ form.hidden_tag() }}
         <p>
             {{ form.surname.label }}<br>
@@ -32,18 +32,27 @@
             {% endfor %}
         </p>
         <p>
-            {{ form.password.label }}<br>
-            {{ form.password(class="form-control", type="password") }}<br>
-            {% for error in errors.password %}
+            {{ form.title.label }}<br>
+            {{ form.title(class="form-control") }}<br>
+            {% for error in errors.title %}
                 <p class="alert alert-danger" role="alert">
                     {{ error }}
                 </p>
             {% endfor %}
         </p>
         <p>
-            {{ form.confirm.label }}<br>
-            {{ form.confirm(class="form-control", type="password") }}<br>
-            {% for error in errors.confirm %}
+            {{ form.theme.label }}<br>
+            {{ form.theme(class="form-control") }}<br>
+            {% for error in errors.theme %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.description.label }}<br>
+            {{ form.description(class="form-control") }}<br>
+            {% for error in errors.description %}
                 <p class="alert alert-danger" role="alert">
                     {{ error }}
                 </p>
