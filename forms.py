@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, EqualTo, Email
 
 
 class RegisterForm(FlaskForm):
-    email = EmailField('Почта', validators=[DataRequired() ,
+    email = EmailField('Почта', validators=[DataRequired(),
                                             Email(message="Укажите действительный адрес электронной почты")])
     name = StringField('Имя', validators=[DataRequired()])
     surname = StringField('Фамилия', validators=[DataRequired()])
@@ -30,6 +30,11 @@ class EditProfileForm(FlaskForm):
     confirm = PasswordField('Повторите пароль', validators=[EqualTo('password', message='Пароли не совпадают')])
     avatar_file = FileField("Выберите фото")
     submit = SubmitField('Сохранить изменения')
+
+
+class MessageForm(FlaskForm):
+    body = StringField()
+    submit = SubmitField(">")
 
 
 class Add_Project(FlaskForm):

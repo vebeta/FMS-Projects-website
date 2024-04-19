@@ -1,8 +1,10 @@
 import os
 from flask import Flask, render_template, redirect, flash, request
-from forms import LoginForm, RegisterForm, EditProfileForm
+from forms import LoginForm, RegisterForm, EditProfileForm, MessageForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.users import User
+from data.projects import Projects
+from data.messages import Message
 from flask_sqlalchemy import SQLAlchemy
 from data import db_session
 from flask_migrate import Migrate
@@ -42,6 +44,22 @@ def projects_page():
 @app.route('/add_project')
 def add_project_page():
     return render_template('add_project.html', title='Заявка проекта')
+
+
+@app.route('/chat', methods=['GET', 'POST'])
+def chat():
+    message_form = MessageForm()
+    db_sess = db_session.create_session()
+    if request.method == 'POST':
+        new_message = Message(body=message_form.body.data,
+                              project_id=2,
+                              is_from_teacher=(current_user.role == 'teacher'))
+        db_sess.add(new_message)
+        db_sess.commit()
+    message_form.body.data = ''
+    project = db_sess.query(Projects).get(2)
+    messages = db_sess.query(Message).filter(Message.project == project).order_by(Message.date).all()
+    return render_template('_chat.html', title='Чат', form=message_form, messages=messages)
 
 
 @app.route('/register', methods=['GET', 'POST'])
