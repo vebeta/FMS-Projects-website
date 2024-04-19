@@ -32,6 +32,11 @@ class EditProfileForm(FlaskForm):
     submit = SubmitField('Сохранить изменения')
 
 
+class MessageForm(FlaskForm):
+    body = StringField()
+    submit = SubmitField(">")
+
+
 class AddProjectForm(FlaskForm):
     email = EmailField('Почта', validators=[DataRequired()])
     name = StringField('Имя', validators=[DataRequired()])
