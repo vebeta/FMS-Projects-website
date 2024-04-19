@@ -33,7 +33,7 @@ class EditProfileForm(FlaskForm):
 
 
 class MessageForm(FlaskForm):
-    body = StringField()
+    body = StringField(validators=[DataRequired()])
     submit = SubmitField(">")
 
 

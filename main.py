@@ -80,14 +80,14 @@ def add_project_page():
 def chat():
     message_form = MessageForm()
     db_sess = db_session.create_session()
-    if request.method == 'POST':
+    if request.method == 'POST' and message_form.validate_on_submit():
         new_message = Message(body=message_form.body.data,
                               project_id=2,
                               is_from_teacher=(current_user.role == 'teacher'))
         db_sess.add(new_message)
         db_sess.commit()
     message_form.body.data = ''
-    project = db_sess.query(Projects).get(2)
+    project = db_sess.query(Project).get(2)
     messages = db_sess.query(Message).filter(Message.project == project).order_by(Message.date).all()
     return render_template('_chat.html', title='Чат', form=message_form, messages=messages)
 
