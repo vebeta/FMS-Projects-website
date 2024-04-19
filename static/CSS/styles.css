@@ -71,6 +71,7 @@ body {
     border-radius: 5px;
     color: white;
     background-color: blue;
+    word-wrap: break-word;
     width: 250px;
     float: right;
     padding: 5px;
@@ -79,6 +80,7 @@ body {
 .to {
     border-radius: 5px;
     border: solid grey 3px;
+    word-wrap: break-word;
     width: 250px;
     float: left;
     padding: 3px;
