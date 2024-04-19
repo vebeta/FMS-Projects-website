@@ -2,15 +2,15 @@ import os
 import sqlite3
 
 from flask import Flask, render_template, redirect, flash, request
-from forms import LoginForm, RegisterForm, EditProfileForm, AddProjectForm
+from forms import LoginForm, RegisterForm, EditProfileForm, MessageForm, AddProjectForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.users import User
 from data.projects import Project
+from data.messages import Message
 from flask_sqlalchemy import SQLAlchemy
 from data import db_session
 from flask_migrate import Migrate
 from config import Config
-
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -69,6 +69,22 @@ def add_project_page():
         db_sess.commit()
         return redirect('/')
     return render_template('add_project.html', title='Заявка проекта', form=form, errors=errors)
+
+
+@app.route('/chat', methods=['GET', 'POST'])
+def chat():
+    message_form = MessageForm()
+    db_sess = db_session.create_session()
+    if request.method == 'POST':
+        new_message = Message(body=message_form.body.data,
+                              project_id=2,
+                              is_from_teacher=(current_user.role == 'teacher'))
+        db_sess.add(new_message)
+        db_sess.commit()
+    message_form.body.data = ''
+    project = db_sess.query(Projects).get(2)
+    messages = db_sess.query(Message).filter(Message.project == project).order_by(Message.date).all()
+    return render_template('_chat.html', title='Чат', form=message_form, messages=messages)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -150,7 +166,7 @@ def edit_profile():
         current_user.name = form.name.data
         if form.password.data:
             current_user.set_password(form.password.data)
-        if form.avatar_file.data and allowed_file(form.avatar_file.data.filename):
+        if form.avatar_file.data:
             form.avatar_file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], current_user.email + '.png'))
             current_user.avatar_exist = True
             flash('Фото обновлено!')
@@ -162,13 +178,8 @@ def edit_profile():
     elif request.method == 'GET':
         form.name.data = current_user.name
         form.surname.data = current_user.surname
-    return render_template('edit_profile.html', title='Edit Profile', form=form, errors=errors)
-
-
-def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return render_template('edit_profile.html', title='Edit Profile',
+                           form=form, errors=errors)
 
 
 @app.route('/logout')
