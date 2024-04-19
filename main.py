@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, redirect, flash, request
 from forms import LoginForm, RegisterForm, EditProfileForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -122,15 +123,15 @@ def edit_profile():
         current_user.name = form.name.data
         if form.password.data:
             current_user.set_password(form.password.data)
+        if form.avatar_file.data and allowed_file(form.avatar_file.data.filename):
+            form.avatar_file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], current_user.email + '.png'))
+            current_user.avatar_exist = True
+            flash('Фото обновлено!')
         new_user = db_sess.merge(current_user)
         db_sess.add(new_user)
         db_sess.commit()
         flash('Изменения сохранены!')
-        print(form.avatar_file.data.filename)
-        if form.avatar_file.data and allowed_file(form.avatar_file.data.filename):
-            form.avatar_file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], current_user.email + '.png'))
-            flash('Фото обновлено!')
-            return redirect('/')
+        return redirect(f'/profile/{current_user.id}')
     elif request.method == 'GET':
         form.name.data = current_user.name
         form.surname.data = current_user.surname

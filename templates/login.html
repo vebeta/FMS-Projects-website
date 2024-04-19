@@ -1,12 +1,12 @@
-{% extends "base_reserve.html" %}
+{% extends "base.html" %}
 
 {% block content %}
     <div class="form">
-        <form action="" method="post">
+        <form action="" method="post" novalidate>
             {{ form.hidden_tag() }}
             <p>
                 {{ form.email.label }}<br>
-                {{ form.email(class="form-control", type="email") }}<br>
+                {{ form.email(class="form-control") }}<br>
                 {% for error in errors.email %}
                     <div class="alert alert-danger" role="alert">
                         {{ error }}
@@ -15,7 +15,7 @@
             </p>
             <p>
                 {{ form.password.label }}<br>
-                {{ form.password(class="form-control", type="password") }}<br>
+                {{ form.password(class="form-control") }}<br>
                 {% for error in errors.password %}
                     <div class="alert alert-danger" role="alert">
                         {{ error }}

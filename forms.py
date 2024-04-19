@@ -4,16 +4,18 @@ from wtforms.validators import DataRequired, EqualTo, Email
 
 
 class RegisterForm(FlaskForm):
-    email = EmailField('Почта', validators=[DataRequired()])
+    email = EmailField('Почта', validators=[DataRequired() ,
+                                            Email(message="Укажите действительный адрес электронной почты")])
     name = StringField('Имя', validators=[DataRequired()])
     surname = StringField('Фамилия', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
-    confirm = PasswordField('Повторите пароль', validators=[EqualTo('password')])
+    confirm = PasswordField('Повторите пароль', validators=[EqualTo('password', message='Пароли не совпадают')])
     submit = SubmitField('Создать аккаунт')
 
 
 class LoginForm(FlaskForm):
-    email = EmailField('Почта', validators=[DataRequired()])
+    email = EmailField('Почта', validators=[DataRequired(),
+                                            Email(message="Укажите действительный адрес электронной почты")])
     password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
@@ -26,7 +28,9 @@ class EditProfileForm(FlaskForm):
     name = StringField('Имя', validators=[DataRequired(message="Это поле обязательно")])
     password = PasswordField('Пароль')
     confirm = PasswordField('Повторите пароль', validators=[EqualTo('password', message='Пароли не совпадают')])
+    avatar_file = FileField("Выберите фото")
     submit = SubmitField('Сохранить изменения')
+
 
 class Add_Project(FlaskForm):
     email = EmailField('Почта', validators=[DataRequired()])
