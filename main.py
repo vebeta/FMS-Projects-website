@@ -61,15 +61,10 @@ def add_project_page():
         if any(errors.values()):
             return render_template('add_project.html', title='Заявка проекта', form=form, errors=errors)
 
-        con = sqlite3.connect("science_projects.sqlite")
-        cur = con.cursor()
-        us_id = cur.execute("""SELECT id FROM users WHERE email = ?""", (form.email.data,)).fetchone()
-        con.close()
-
-        project = Project(title=form.surname.data,
-                          theme=form.name.data,
-                          description=form.email.data,
-                          author_id=us_id)
+        project = Project(title=form.title.data,
+                          theme=form.theme.data,
+                          description=form.description.data,
+                          author_id=current_user.id)
         db_sess.add(project)
         db_sess.commit()
         return redirect('/')
