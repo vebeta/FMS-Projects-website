@@ -171,7 +171,7 @@ def edit_profile():
         current_user.name = form.name.data
         if form.password.data:
             current_user.set_password(form.password.data)
-        if form.avatar_file.data and allowed_file(form.avatar_file.data.filename):
+        if form.avatar_file.data:
             form.avatar_file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], current_user.email + '.png'))
             current_user.avatar_exist = True
             flash('Фото обновлено!')
@@ -185,12 +185,6 @@ def edit_profile():
         form.surname.data = current_user.surname
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form, errors=errors)
-
-
-def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/logout')

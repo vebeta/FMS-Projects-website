@@ -12,4 +12,4 @@ class Message(SqlAlchemyBase):
     date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now())
     is_from_teacher = sqlalchemy.Column(sqlalchemy.Boolean)
     project_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("projects.id"))
-    project = orm.relationship('Projects')
+    project = orm.relationship('Project')
