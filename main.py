@@ -1,8 +1,11 @@
 import os
+import sqlite3
+
 from flask import Flask, render_template, redirect, flash, request
-from forms import LoginForm, RegisterForm, EditProfileForm
+from forms import LoginForm, RegisterForm, EditProfileForm, AddProjectForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.users import User
+from data.projects import Project
 from flask_sqlalchemy import SQLAlchemy
 from data import db_session
 from flask_migrate import Migrate
@@ -42,7 +45,35 @@ def projects_page():
 
 @app.route('/add_project')
 def add_project_page():
-    return render_template('add_project.html', title='Заявка проекта')
+    form = AddProjectForm()
+    errors = {
+        "surname": [],
+        "name": [],
+        "email": [],
+        "title": [],
+        "theme": [],
+        "description": [],
+    }
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if db_sess.query(Project).filter(Project.title == form.title.data).first():
+            errors["title"].append("Проект с таким названием уже существует!")
+        if any(errors.values()):
+            return render_template('add_project.html', title='Заявка проекта', form=form, errors=errors)
+
+        con = sqlite3.connect("science_projects.sqlite")
+        cur = con.cursor()
+        us_id = cur.execute("""SELECT id FROM users WHERE email = ?""", (form.email.data,)).fetchone()
+        con.close()
+
+        project = Project(title=form.surname.data,
+                          theme=form.name.data,
+                          description=form.email.data,
+                          author_id=us_id)
+        db_sess.add(project)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('add_project.html', title='Заявка проекта', form=form, errors=errors)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -136,8 +167,7 @@ def edit_profile():
     elif request.method == 'GET':
         form.name.data = current_user.name
         form.surname.data = current_user.surname
-    return render_template('edit_profile.html', title='Edit Profile',
-                           form=form, errors=errors)
+    return render_template('edit_profile.html', title='Edit Profile', form=form, errors=errors)
 
 
 def allowed_file(filename):

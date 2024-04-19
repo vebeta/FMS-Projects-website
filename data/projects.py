@@ -4,7 +4,7 @@ from sqlalchemy import orm
 from .db_session import SqlAlchemyBase
 
 
-class Projects(SqlAlchemyBase):
+class Project(SqlAlchemyBase):
     __tablename__ = 'projects'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

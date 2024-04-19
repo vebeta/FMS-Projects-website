@@ -32,7 +32,7 @@ class EditProfileForm(FlaskForm):
     submit = SubmitField('Сохранить изменения')
 
 
-class Add_Project(FlaskForm):
+class AddProjectForm(FlaskForm):
     email = EmailField('Почта', validators=[DataRequired()])
     name = StringField('Имя', validators=[DataRequired()])
     surname = StringField('Фамилия', validators=[DataRequired()])
