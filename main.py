@@ -1,13 +1,14 @@
+import os
 from flask import Flask, render_template, redirect, flash, request
 from forms import LoginForm, RegisterForm, EditProfileForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.users import User
 from data.themes import Themes
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.utils import secure_filename
 from data import db_session
 from flask_migrate import Migrate
 from config import Config
-
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -119,12 +120,22 @@ def edit_profile():
         db_sess.add(new_user)
         db_sess.commit()
         flash('Изменения сохранены!')
-        return redirect(f"/profile/{current_user.id}")
+        print(form.avatar_file.data.filename)
+        if form.avatar_file.data and allowed_file(form.avatar_file.data.filename):
+            form.avatar_file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], current_user.email + '.png'))
+            flash('Фото обновлено!')
+            return redirect('/')
     elif request.method == 'GET':
         form.name.data = current_user.name
         form.surname.data = current_user.surname
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form, errors=errors)
+
+
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/logout')

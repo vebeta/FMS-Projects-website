@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="form">
-    <form action="" method="post" novalidate>
+    <form action="" method="post" enctype="multipart/form-data" novalidate>
         {{ form.hidden_tag() }}
         <p>
             {{ form.surname.label }}<br>
@@ -70,6 +70,15 @@
                 </p>
             {% endfor %}
             {% for error in errors.confirm %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.avatar_file.label }} <br>
+            {{ form.avatar_file(class="file-manager", accept="image/*") }}
+            {% for error in form.avatar_file.errors %}
                 <p class="alert alert-danger" role="alert">
                     {{ error }}
                 </p>

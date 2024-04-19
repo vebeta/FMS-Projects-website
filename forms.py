@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField, FileField
 from wtforms.validators import DataRequired, EqualTo, Email
 
 
@@ -28,4 +28,5 @@ class EditProfileForm(FlaskForm):
     name = StringField('Имя', validators=[DataRequired(message="Это поле обязательно")])
     password = PasswordField('Пароль')
     confirm = PasswordField('Повторите пароль', validators=[EqualTo('password', message='Пароли не совпадают')])
+    avatar_file = FileField('Выберите фото')
     submit = SubmitField('Сохранить изменения')

@@ -14,7 +14,6 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     name = sqlalchemy.Column(sqlalchemy.String)
     role = sqlalchemy.Column(sqlalchemy.String)
     email = sqlalchemy.Column(sqlalchemy.String, unique=True)
-    avatar_filename = sqlalchemy.Column(sqlalchemy.String)
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
 
     themes = orm.relationship("Themes", back_populates='user')
