@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="chat">
+        <div id="messages" class="messages">
+            {% for message in messages %}
+            {% if message.is_from_teacher != (current_user.role == 'teacher')%}<p class="to">{{ message.body }}</p>
+            {% else %}<p class="from">{{ message.body }}</p>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div id="input" class="input">
+            <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            {{ form.body(class="form-control") }} {{ form.submit(type="submit", class="btn btn-primary") }}
+            </form>
+        </div>
+    </div>
+{% endblock %}
