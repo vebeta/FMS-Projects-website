@@ -14,10 +14,10 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     name = sqlalchemy.Column(sqlalchemy.String)
     role = sqlalchemy.Column(sqlalchemy.String)
     email = sqlalchemy.Column(sqlalchemy.String, unique=True)
-    avatar_filename = sqlalchemy.Column(sqlalchemy.String)
+    avatar_exist = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
 
-    themes = orm.relationship("Themes", back_populates='user')
+    projects = orm.relationship("Projects", back_populates='user')
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

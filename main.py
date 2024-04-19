@@ -1,8 +1,8 @@
+import os
 from flask import Flask, render_template, redirect, flash, request
 from forms import LoginForm, RegisterForm, EditProfileForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.users import User
-from data.themes import Themes
 from flask_sqlalchemy import SQLAlchemy
 from data import db_session
 from flask_migrate import Migrate
@@ -35,6 +35,16 @@ def main_page():
     return render_template('home.html', title='Главная')
 
 
+@app.route('/projects')
+def projects_page():
+    return render_template('projects.html', title='Проекты')
+
+
+@app.route('/add_project')
+def add_project_page():
+    return render_template('add_project.html', title='Заявка проекта')
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()
@@ -52,8 +62,7 @@ def reqister():
             return render_template("register.html", title="Регистрация", form=form, errors=errors)
         user = User(surname=form.surname.data,
                     name=form.name.data,
-                    email=form.email.data,
-                    role="student")
+                    email=form.email.data)
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
@@ -115,16 +124,26 @@ def edit_profile():
         current_user.name = form.name.data
         if form.password.data:
             current_user.set_password(form.password.data)
+        if form.avatar_file.data and allowed_file(form.avatar_file.data.filename):
+            form.avatar_file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], current_user.email + '.png'))
+            current_user.avatar_exist = True
+            flash('Фото обновлено!')
         new_user = db_sess.merge(current_user)
         db_sess.add(new_user)
         db_sess.commit()
         flash('Изменения сохранены!')
-        return redirect(f"/profile/{current_user.id}")
+        return redirect(f'/profile/{current_user.id}')
     elif request.method == 'GET':
         form.name.data = current_user.name
         form.surname.data = current_user.surname
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form, errors=errors)
+
+
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/logout')

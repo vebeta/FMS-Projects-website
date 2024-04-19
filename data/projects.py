@@ -13,8 +13,8 @@ class Projects(SqlAlchemyBase):
     description = sqlalchemy.Column(sqlalchemy.String)
     start_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime)
     end_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime)
-    status = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
+    is_accepted = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
     author_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
-    student_id = sqlalchemy.Column(sqlalchemy.Integer)
+    #student_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
     user = orm.relationship('User')

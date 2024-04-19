@@ -8,3 +8,4 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
                               'sqlite:///' + os.path.join(basedir, 'db/science_projects.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    UPLOAD_FOLDER = 'C:\\Users\\ATregubovich-2022\\PycharmProjects\\FMS-Projects-website\\static\\images\\avatars'
