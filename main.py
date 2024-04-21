@@ -1,5 +1,4 @@
 import os
-import sqlite3
 
 from flask import Flask, render_template, redirect, flash, request
 from forms import LoginForm, RegisterForm, EditProfileForm, MessageForm, AddProjectForm
@@ -45,12 +44,26 @@ def projects_page():
     return render_template('projects.html', title='Проекты', list_of_projects=list_of_projects)
 
 
-@app.route('/projects/<int:project_id>')
+@app.route('/projects/<int:project_id>', methods=['GET', 'POST'])
 def project_page(project_id):
+    message_form = MessageForm()
+
     db_sess = db_session.create_session()
+
+    if request.method == 'POST' and message_form.validate_on_submit():
+        new_message = Message(body=message_form.body.data,
+                              project_id=2,
+                              is_from_teacher=(current_user.role == 'teacher'))
+        db_sess.add(new_message)
+        db_sess.commit()
+    message_form.body.data = ''
+    project = db_sess.query(Project).get(2)
+    messages = db_sess.query(Message).filter(Message.project == project).order_by(Message.date).all()
+
     project = db_sess.query(Project).filter(Project.id == project_id).first()
     science_leader = db_sess.query(User).filter(User.id == project.author_id).first()
-    return render_template('project.html', title='Проект', s_l=science_leader, project=project)
+    return render_template('project.html', title='Проект', s_l=science_leader, project=project, form=message_form,
+                           messages=messages)
 
 
 @app.route('/add_project', methods=['GET', 'POST'])
@@ -61,14 +74,11 @@ def add_project_page():
         "theme": [],
         "description": [],
     }
-    print("111", form.validate_on_submit())
     if form.validate_on_submit():
-        print('form validated on submit')
         db_sess = db_session.create_session()
         if db_sess.query(Project).filter(Project.title == form.title.data).first():
             errors["title"].append("Проект с таким названием уже существует!")
         if any(errors.values()):
-            print("errors")
             return render_template('add_project.html', title='Заявка проекта', form=form, errors=errors)
         project = Project(title=form.title.data,
                           theme=form.theme.data,
@@ -77,24 +87,7 @@ def add_project_page():
         db_sess.add(project)
         db_sess.commit()
         return redirect('/')
-    print('yt')
     return render_template('add_project.html', title='Заявка проекта', form=form, errors=errors)
-
-
-@app.route('/chat', methods=['GET', 'POST'])
-def chat():
-    message_form = MessageForm()
-    db_sess = db_session.create_session()
-    if request.method == 'POST' and message_form.validate_on_submit():
-        new_message = Message(body=message_form.body.data,
-                              project_id=2,
-                              is_from_teacher=(current_user.role == 'teacher'))
-        db_sess.add(new_message)
-        db_sess.commit()
-    message_form.body.data = ''
-    project = db_sess.query(Project).get(2)
-    messages = db_sess.query(Message).filter(Message.project == project).order_by(Message.date).all()
-    return render_template('_chat.html', title='Чат', form=message_form, messages=messages)
 
 
 @app.route('/register', methods=['GET', 'POST'])

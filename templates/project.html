@@ -1,9 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="mt-4">Название: {{ project.title }}</h1>
-    <h1 class="mt-3">Тема: {{ project.theme }}</h1>
-    <h1 class="mt-3">Научный руководитель: {{ s_l.surname }} {{ s_l.name }}</h1>
-    <h1 class="mt-4">Описание: {{ project.description }}</h1>
-
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1 class="mt-4">Название: {{ project.title }}</h1>
+            <h1 class="mt-3">Тема: {{ project.theme }}</h1>
+            <h1 class="mt-3">Научный руководитель: {{ s_l.surname }} {{ s_l.name }}</h1>
+            <h1 class="mt-4">Описание: {{ project.description }}</h1>
+        </div>
+        <div class="col chat">
+            <div id="messages" class="messages">
+                {% for message in messages %}
+                {% if message.is_from_teacher != (current_user.role == 'teacher')%}<p class="to">{{ message.body }}</p>
+                {% else %}<p class="from">{{ message.body }}</p>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div id="input" class="input">
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    {{ form.body(class="form-control") }} {{ form.submit(type="submit", class="btn btn-primary") }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
