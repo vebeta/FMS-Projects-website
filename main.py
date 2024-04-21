@@ -40,7 +40,18 @@ def main_page():
 
 @app.route('/projects')
 def projects_page():
-    return render_template('projects.html', title='Проекты')
+    db_sess = db_session.create_session()
+    list_of_projects = db_sess.query(Project).all()
+    return render_template('projects.html', title='Проекты', list_of_projects=list_of_projects)
+
+
+@app.route('/projects/<int:project_id>')
+def project_page(project_id):
+    db_sess = db_session.create_session()
+    project = db_sess.query(Project).filter(Project.id == project_id).first()
+    print(project)
+    science_leader = db_sess.query(User).filter(User.id == project.author_id).first()
+    return render_template('project.html', title='Проект', s_l=science_leader, project=project)
 
 
 @app.route('/add_project', methods=['GET', 'POST'])

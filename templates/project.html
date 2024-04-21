@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="mt-4">Название: {{ project.title }}</h1>
+    <h1 class="mt-3">Тема: {{ project.theme }}</h1>
+    <h1 class="mt-3">Научный руководитель: {{ s_l.surname }} {{ s_l.name }}</h1>
+    <h1 class="mt-4">Описание: {{ project.description }}</h1>
+
+{% endblock %}
