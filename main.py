@@ -43,24 +43,23 @@ def projects_page():
     return render_template('projects.html', title='Проекты')
 
 
-@app.route('/add_project')
+@app.route('/add_project', methods=['GET', 'POST'])
 def add_project_page():
     form = AddProjectForm()
     errors = {
-        "surname": [],
-        "name": [],
-        "email": [],
         "title": [],
         "theme": [],
         "description": [],
     }
+    print("111", form.validate_on_submit())
     if form.validate_on_submit():
+        print('form validated on submit')
         db_sess = db_session.create_session()
         if db_sess.query(Project).filter(Project.title == form.title.data).first():
             errors["title"].append("Проект с таким названием уже существует!")
         if any(errors.values()):
+            print("errors")
             return render_template('add_project.html', title='Заявка проекта', form=form, errors=errors)
-
         project = Project(title=form.title.data,
                           theme=form.theme.data,
                           description=form.description.data,
@@ -68,6 +67,7 @@ def add_project_page():
         db_sess.add(project)
         db_sess.commit()
         return redirect('/')
+    print('yt')
     return render_template('add_project.html', title='Заявка проекта', form=form, errors=errors)
 
 
