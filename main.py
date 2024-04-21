@@ -49,7 +49,6 @@ def projects_page():
 def project_page(project_id):
     db_sess = db_session.create_session()
     project = db_sess.query(Project).filter(Project.id == project_id).first()
-    print(project)
     science_leader = db_sess.query(User).filter(User.id == project.author_id).first()
     return render_template('project.html', title='Проект', s_l=science_leader, project=project)
 
