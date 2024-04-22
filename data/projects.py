@@ -11,12 +11,12 @@ class Project(SqlAlchemyBase):
     title = sqlalchemy.Column(sqlalchemy.String)
     theme = sqlalchemy.Column(sqlalchemy.String)
     description = sqlalchemy.Column(sqlalchemy.String)
-    start_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime)
-    end_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime)
+    start_date = sqlalchemy.Column(sqlalchemy.DateTime, default=None)
+    end_date = sqlalchemy.Column(sqlalchemy.DateTime, default=None)
     is_accepted = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
     author_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
-    #student_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
+    #student_id = sqlalchemy.Column(sqlalchemy.Integer)
     user = orm.relationship('User')
 
     messages = orm.relationship("Message", back_populates='project')

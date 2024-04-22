@@ -2,11 +2,16 @@
 
 {% block content %}
 <div class="form">
-    <form action="" method="">
+    <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
             {{ form.title.label }}<br>
             {{ form.title(class="form-control") }}<br>
+            {% for error in form.title.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
             {% for error in errors.title %}
                 <p class="alert alert-danger" role="alert">
                     {{ error }}
@@ -16,6 +21,11 @@
         <p>
             {{ form.theme.label }}<br>
             {{ form.theme(class="form-control") }}<br>
+            {% for error in form.theme.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
             {% for error in errors.theme %}
                 <p class="alert alert-danger" role="alert">
                     {{ error }}
@@ -24,7 +34,12 @@
         </p>
         <p>
             {{ form.description.label }}<br>
-            <textarea class="form-control"></textarea><br>
+            {{ form.description(class="form-control") }}<br>
+            {% for error in form.description.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
             {% for error in errors.description %}
                 <p class="alert alert-danger" role="alert">
                     {{ error }}

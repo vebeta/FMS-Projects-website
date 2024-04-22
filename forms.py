@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField, FileField
+from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField, FileField, TextAreaField
 from wtforms.validators import DataRequired, EqualTo, Email
 
 
@@ -38,10 +38,7 @@ class MessageForm(FlaskForm):
 
 
 class AddProjectForm(FlaskForm):
-    email = EmailField('Почта', validators=[DataRequired()])
-    name = StringField('Имя', validators=[DataRequired()])
-    surname = StringField('Фамилия', validators=[DataRequired()])
     title = StringField('Название', validators=[DataRequired()])
     theme = StringField('Тема', validators=[DataRequired()])
-    description = StringField('Описание', validators=[DataRequired()])
+    description = TextAreaField('Описание') # , validators=[DataRequired()]
     submit = SubmitField('Подать заявку')

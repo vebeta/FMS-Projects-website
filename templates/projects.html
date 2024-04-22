@@ -1,11 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Проекты</h1>
+    <h1 class="mt-3">Проекты</h1>
 
-
-    <p>Проект 1</p>
-    <p>Проект 2</p>
-    <p>Проект 3</p>
-    <a class="btn btn-primary" href="/add_project" role="button">Предложить проект</a>
+    {% for proj in list_of_projects %}
+        <div class="container project_itm">
+            <div class="row">
+                <div class="col">
+                    <p>Название: {{ proj.title }}</p>
+                    <p>Тема: {{ proj.theme }}</p>
+                </div>
+                <div class="col">
+                    <p>Описание: {{ proj.description }}</p>
+                </div>
+                <div class="col">
+                    <a class="btn btn-primary" href="{{ url_for('project_page', project_id=proj.id) }}" role="button">Посмотреть проект</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% if current_user.is_authenticated and (current_user.role == "admin" or current_user.role == "teacher") %}
+    <a class="btn btn-primary  mt-5" href="/add_project" role="button">Предложить проект</a>
+    {% endif %}
 {% endblock %}
