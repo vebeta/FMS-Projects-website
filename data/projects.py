@@ -16,7 +16,7 @@ class Project(SqlAlchemyBase):
     is_accepted = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
     author_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
-    #student_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
+    #student_id = sqlalchemy.Column(sqlalchemy.Integer)
     user = orm.relationship('User')
 
     messages = orm.relationship("Message", back_populates='project')
