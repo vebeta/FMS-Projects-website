@@ -64,7 +64,7 @@ def project_page(project_id):
                            messages=messages)
 
 
-@app.route('/add_project', methods=['GET', 'POST'])
+@app.route('/add_project')
 def add_project_page():
     form = AddProjectForm()
     errors = {
@@ -78,6 +78,7 @@ def add_project_page():
             errors["title"].append("Проект с таким названием уже существует!")
         if any(errors.values()):
             return render_template('add_project.html', title='Заявка проекта', form=form, errors=errors)
+
         project = Project(title=form.title.data,
                           theme=form.theme.data,
                           description=form.description.data,
